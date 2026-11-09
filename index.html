@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/jpeg" href="favicon.jpeg">
+  <link rel="shortcut icon" type="image/jpeg" href="favicon.jpeg">
+  <link rel="apple-touch-icon" href="favicon.jpeg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>AI MAX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700;800;900&family=Orbitron:wght@700;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      background-color: #000;
+      font-family: 'Chakra Petch', sans-serif;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    /* Background Full-Screen iFrame */
+    #site-frame {
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Compact AI Widget Container */
+    .ai-bot-container {
+      position: absolute;
+      top: 70px;
+      right: 12px;
+      z-index: 99999;
+      touch-action: none;
+      cursor: move;
+    }
+
+    /* Premium Obsidian & Gold Accent Card */
+    .ai-bot-card {
+      width: 96px;
+      height: 96px;
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(6, 10, 18, 0.98));
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 14px;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      box-shadow: 
+        0 8px 24px -4px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 10px rgba(245, 158, 11, 0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 6px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .ai-bot-card:hover {
+      border-color: rgba(245, 158, 11, 0.6);
+      box-shadow: 
+        0 10px 28px -4px rgba(0, 0, 0, 0.9),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        0 0 14px rgba(245, 158, 11, 0.25);
+    }
+
+    /* Header Wrap */
+    .bot-header-wrap {
+      width: 100%;
+      text-align: center;
+      pointer-events: none;
+      margin-top: 1px;
+    }
+
+    .bot-header {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 9.5px;
+      letter-spacing: 0.8px;
+      color: #fbbf24;
+      text-transform: uppercase;
+      line-height: 1;
+      white-space: nowrap;
+      text-shadow: 0 0 6px rgba(251, 191, 36, 0.5);
+    }
+
+    .real-clock {
+      font-family: 'Orbitron', monospace;
+      font-size: 7.5px;
+      color: rgba(255, 255, 255, 0.8);
+      letter-spacing: 0.3px;
+      text-align: center;
+      margin-top: 2px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* Screen 1: Password Form (Ultra Compact) */
+    .login-view {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      margin-bottom: 2px;
+    }
+
+    .password-input {
+      width: 100%;
+      height: 20px;
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 5px;
+      color: #ffffff;
+      font-family: 'Orbitron', monospace;
+      font-size: 8px;
+      text-align: center;
+      outline: none;
+      padding: 0 2px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+      transition: border-color 0.2s;
+      user-select: text !important;
+      -webkit-user-select: text !important;
+    }
+
+    .password-input:focus {
+      border-color: #fbbf24;
+    }
+
+    .password-input.err {
+      border-color: #ff4757;
+      box-shadow: inset 0 0 5px rgba(255, 71, 87, 0.4);
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 19px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border: none;
+      border-radius: 5px;
+      color: #000000;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 8.5px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4);
+      transition: transform 0.1s, background 0.2s;
+    }
+
+    .login-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Screen 2: Signal View (Perfectly Fitted BIG / SMALL Badge) */
+    .signal-view {
+      width: 100%;
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      pointer-events: none;
+    }
+
+    .result-badge {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 13.5px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      line-height: 1;
+      margin: auto 0;
+      text-align: center;
+      width: 100%;
+      white-space: nowrap;
+    }
+
+    .result-badge.big {
+      color: #10b981;
+      text-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    }
+
+    .result-badge.small {
+      color: #ef4444;
+      text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+    }
+
+    .timer-text {
+      font-family: 'Orbitron', monospace;
+      font-size: 8px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Website Frame -->
+  <iframe id="site-frame" src="https://dkwin9.com/#/register?invitationCode=239610642281" title="Okabdt Website" allow="fullscreen; clipboard-read; clipboard-write; geolocation"></iframe>
+
+  <!-- Floating Premium AI Bot Widget -->
+  <div class="ai-bot-container" id="aiBotWidget">
+    <div class="ai-bot-card" id="botCard">
+
+      <!-- Header & Realtime Clock -->
+      <div class="bot-header-wrap">
+        <div class="bot-header" id="botHeader">AI MAX</div>
+        <div class="real-clock" id="realClock">00:00:00</div>
+      </div>
+
+      <!-- Password View -->
+      <div class="login-view" id="loginView">
+        <input type="password" id="pwdInput" class="password-input" placeholder="Password" value="" autocomplete="off" />
+        <button class="login-btn" id="loginBtn">LOGIN</button>
+      </div>
+
+      <!-- Signal View (BIG / SMALL) -->
+      <div class="signal-view" id="signalView">
+        <div class="result-badge big" id="resultBadge">BIG</div>
+        <div class="timer-text" id="periodTimer">30s</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const VALID_PASS = "WINAIXPZ-XP";
+    let isActivated = false;
+    let currentShownPeriodKey = "";
+
+    // Update Real-World Time (H:M:S) every second & sync 30s period
+    setInterval(updateRealtimeClock, 200);
+    updateRealtimeClock();
+
+    function updateRealtimeClock() {
+      const now = new Date();
+      const hrs = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      const secs = String(now.getSeconds()).padStart(2, '0');
+
+      document.getElementById('realClock').innerText = `${hrs}:${mins}:${secs}`;
+
+      if (isActivated) {
+        const currentSec = now.getSeconds();
+        const cycleSec = currentSec % 30;
+        const remainingSec = 30 - cycleSec;
+
+        document.getElementById('periodTimer').innerText = `${remainingSec}s`;
+
+        // Advance period prediction 2 seconds early
+        const effectiveDate = new Date(now.getTime() + (remainingSec <= 2 ? 2000 : 0));
+        const periodIndex = Math.floor(effectiveDate.getSeconds() / 30);
+        const periodKey = `${effectiveDate.getFullYear()}${effectiveDate.getMonth()}${effectiveDate.getDate()}${effectiveDate.getHours()}${effectiveDate.getMinutes()}_p${periodIndex}`;
+
+        if (periodKey !== currentShownPeriodKey) {
+          currentShownPeriodKey = periodKey;
+          showSignalInstant(periodKey);
+        }
+      }
+    }
+
+    // Password Check
+    function checkPassword() {
+      const inputEl = document.getElementById('pwdInput');
+      const enteredPass = inputEl.value.trim();
+
+      if (enteredPass.toUpperCase() === VALID_PASS) {
+        inputEl.classList.remove('err');
+        isActivated = true;
+        document.getElementById('loginView').style.display = 'none';
+        document.getElementById('signalView').style.display = 'flex';
+        updateRealtimeClock();
+      } else {
+        inputEl.classList.add('err');
+        inputEl.value = '';
+        inputEl.placeholder = 'WRONG';
+        setTimeout(() => {
+          inputEl.placeholder = 'Password';
+          inputEl.classList.remove('err');
+        }, 1500);
+      }
+    }
+
+    // Login button click event listener
+    document.getElementById('loginBtn').addEventListener('click', function(e) {
+      e.stopPropagation();
+      checkPassword();
+    });
+
+    // Press Enter to Login
+    document.getElementById('pwdInput').addEventListener('keyup', function(e) {
+      if (e.key === 'Enter') checkPassword();
+    });
+
+    // Instant Signal Display
+    function showSignalInstant(periodKey) {
+      const resultBadge = document.getElementById('resultBadge');
+
+      let hash = 0;
+      for (let i = 0; i < periodKey.length; i++) {
+        hash = (hash << 5) - hash + periodKey.charCodeAt(i);
+        hash |= 0;
+      }
+
+      const isBig = Math.abs(hash) % 2 === 0;
+      if (isBig) {
+        resultBadge.innerText = 'BIG';
+        resultBadge.className = 'result-badge big';
+      } else {
+        resultBadge.innerText = 'SMALL';
+        resultBadge.className = 'result-badge small';
+      }
+    }
+
+    // ----------------------------------------------------
+    // Universal Drag & Touch Functionality
+    // ----------------------------------------------------
+    const widget = document.getElementById('aiBotWidget');
+    let isDragging = false;
+    let hasMoved = false;
+    let currentX = 0, currentY = 0, initialX = 0, initialY = 0;
+    let xOffset = 0, yOffset = 0;
+
+    widget.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
+
+    widget.addEventListener('touchstart', dragStart, { passive: false });
+    document.addEventListener('touchmove', drag, { passive: false });
+    document.addEventListener('touchend', dragEnd);
+
+    function dragStart(e) {
+      hasMoved = false;
+      const clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type === "touchstart" ? e.touches[0].clientY : e.clientY;
+
+      initialX = clientX - xOffset;
+      initialY = clientY - yOffset;
+      isDragging = true;
+    }
+
+    function drag(e) {
+      if (!isDragging) return;
+
+      const clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
+
+      const deltaX = Math.abs(clientX - (initialX + xOffset));
+      const deltaY = Math.abs(clientY - (initialY + yOffset));
+
+      if (deltaX > 2 || deltaY > 2) {
+        hasMoved = true;
+      }
+
+      currentX = clientX - initialX;
+      currentY = clientY - initialY;
+
+      xOffset = currentX;
+      yOffset = currentY;
+      widget.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+
+      if (hasMoved && e.cancelable) {
+        e.preventDefault();
+      }
+    }
+
+    function dragEnd(e) {
+      initialX = currentX;
+      initialY = currentY;
+      isDragging = false;
+    }
+  </script>
+</body>
+</html>
